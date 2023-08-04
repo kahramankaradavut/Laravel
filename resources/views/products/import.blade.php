@@ -15,7 +15,7 @@
 
 <body>
     <div class="header">
-        <h1>Piri Project Detailer</h1>
+        <h1>KC Project Detailer</h1>
         <h4>View The Details Of Your Project Excel File</h4>
     </div>
 

@@ -31,7 +31,7 @@ class Task extends Model
 
     public function getEmployeeNamesAttribute()
     {
-        return explode(', ', $this->employees_name);
+        return explode(', ', $this->assignees);
     }
 
 }
