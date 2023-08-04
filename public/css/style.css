@@ -1,0 +1,212 @@
+body {
+    background-color: #353535;
+    color: #ffffff;
+    font-family: 'Lato', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .custom-button {
+    background-image: linear-gradient(to right, #114357 0%, #F29492  51%, #114357  100%);
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    box-shadow: 0 0 2px #eee;
+    border-radius: 10px;
+    display: block;
+  }
+  
+  .custom-button:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .custom-select {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Lato', sans-serif;
+  }
+  
+  .custom-select select {
+    width: 200%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    background-color: #444444;
+    color: #aaaaaa;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  
+  .custom-select::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #555555;
+  }
+  
+  .custom-select select:focus {
+    outline: none;
+    box-shadow: 0 0 4px #aaaaaa;
+  }
+  
+  .custom-select option {
+    background-color: #aaaaaa;
+    color: #555555;
+  }
+  .custom-select select::-ms-expand {
+    display: none;
+  }
+  
+  .custom-select select option {
+    padding: 10px;
+    background-color: #555555;
+    color: #e4dfdf;
+    transition: background-color 0.3s ease;
+  }
+  
+  .custom-select select option:hover {
+    background-color: #aaaaaa;
+  }
+  
+  .custom-select select:focus {
+    outline: none;
+    box-shadow: 0 0 3px #aaaaaa;
+  }
+  
+  
+  .header {
+    background-color: #f8f8f8;
+    padding: 20px;
+    text-align: center;
+    color: #353535;
+  }
+  
+  .header h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    line-height: 1.2;
+    text-shadow: 6px 6px 6px #0000001a;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  h4 {
+  color: #5f6263;
+  letter-spacing: 3px;
+  font-weight: lighter;
+  }
+  
+
+  .content {
+    background-color: #353535;
+    padding: 20px;
+    margin: 20px auto;
+    width: 600px;
+    text-align: center;
+  }
+  
+  .content p {
+  text-align: center;
+  color: #f8f8f8;
+  font-size: 20px;
+  font-weight: lighter;
+  }
+
+.content input[type="text"] {
+  padding: 10px;
+  margin-bottom: 10px;
+  margin-top: 30px; 
+  width: 100%;
+  border: 1px solid #555555;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: #ffffff;
+  background-color: #444444;
+  outline: none; 
+}
+.content input[type="text"]::placeholder {
+    color: #aaaaaa;
+  }
+
+.content input[type="file"] {
+  padding: 15px;
+  margin-bottom: 15px;
+  width: 100%;
+  border: 2px dashed #555555;
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: #ffffff;
+  background-color: #444444;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.content input[type="file"]::before {
+  content: "Dosya Seçin";
+}
+
+.content input[type="file"]:hover,
+.content input[type="file"]:focus {
+  background-color: #555555;
+}
+  
+.file-drop-area {
+    position: relative;
+    width: 100%;
+    height: 100px;
+    border: 2px dashed #555555;
+    border-radius: 6px;
+    background-color: #444444;
+    display: flex;
+    align-items: center;
+    margin-top: 50px;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+.file-drop-text {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-drop-area:focus,
+.file-drop-area:hover {
+  outline: none;
+}
+ 
+#line {
+  border-bottom: 1px solid #dddddd;
+}
+  
+  
