@@ -47,6 +47,7 @@ class ExcelController extends Controller
 
         $products = Task::where('project_defination_id', $mainTable->id)->get();
         
+        
        
 
 
@@ -121,14 +122,18 @@ foreach ($tasks as $task) {
             foreach ($names as $name) {
                 if (!isset($completionStatus[$name])) {
                     $completionStatus[$name] = [
-                        'completed' => 0,
+                        'undelayed' => 0,
                         'delayed' => 0,
+                        'completed' => 0,
                     ];
                 }
                 if ($product->complation_status_color == 1) {
-                    $completionStatus[$name]['completed']++;
+                    $completionStatus[$name]['undelayed']++;
                 } if($product->complation_status_color == 2) {
                     $completionStatus[$name]['delayed']++;
+                }
+                if($product->status === 'Done') {
+                    $completionStatus[$name]['completed']++;
                 }
                
             }

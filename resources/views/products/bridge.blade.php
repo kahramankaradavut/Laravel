@@ -78,10 +78,12 @@
 
     <nav>
         <ul>
-            <li><a id="copyLinkButton" href="{{ route('show.table', $textInput) }}">Copy Page Link</a></li>
-            <li><a href="{{ route('importpage') }}">Main Page</a></li>
+            <li><a id="copyLinkButton" href="{{ route('show.table', $textInput) }}" class="menubar">Copy Page Link</a></li>
+            <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
+            <li><a href="{{ route('all.projects') }}">Details of All Projects</a></li>
+            <li><a href="{{ route('all.employees') }}">Details of All Employees</a></li>
             <li class="dropdown">
-                <a href="#">All Projects ▼</a>
+                <a href="#" class="menubar">All Projects ▼</a>
                 <ul class="dropdown-menu">
                     @foreach ($inputs as $input)
                         <li><a href="{{ route('show.table', $input->uid) }}">{{ $input->name }}</a></li>
@@ -112,6 +114,8 @@
             <!-- Tablo başlıkları -->
             <thead>
                 <tr>
+                    <th>Task ID</th>
+                    <th>Title</th>
                     <th>Employees</th>
                     <th>Status</th>
                     <th>Label</th>
@@ -126,6 +130,8 @@
 
                 @foreach ($products as $product)
                     <tr>
+                        <td>{{ $product->id }}</td>
+                        <td>{{ $product->title }}</td>
                         <td>{{ $product->assignees }}</td>
                         <td>{{ $product->status }}</td>
                         <td>{{ $product->labels }}</td>
@@ -159,6 +165,7 @@
                     <th>Employee</th>
                     <th>Job Count</th>
                     <th>Completed Tasks</th>
+                    <th>Undelayed Tasks</th>
                     <th>Delayed Tasks</th>
                     <th>Success Rate</th>
                 </tr>
@@ -168,10 +175,10 @@
 
                 @foreach ($usageCount as $name => $count)
                     @php
-                        $completed = $completionStatus[$name]['completed'];
+                        $undelayed = $completionStatus[$name]['undelayed'];
                         $delayed = $completionStatus[$name]['delayed'];
                         
-                        $completionPercentage = $completed > 0 ? round(($completed / ($completed + $delayed)) * 100, 2) : 0;
+                        $completionPercentage = $undelayed > 0 ? round(($undelayed / ($undelayed + $delayed)) * 100, 2) : 0;
                         
 
                         $colorClass = '';
@@ -189,9 +196,9 @@
                         </td>
                         <td>{{ $count }}</td>
                         <td>{{ $completionStatus[$name]['completed'] }}</td>
+                        <td>{{ $completionStatus[$name]['undelayed'] }}</td>
                         <td>{{ $completionStatus[$name]['delayed'] }}</td>
                         <td class="{{ $colorClass }}">
-
                             <div>
                                 <span style="color: rgb(0, 0, 0)">{{ number_format($completionPercentage, 2) }}%</span>
                             </div>
@@ -200,6 +207,53 @@
                 @endforeach
             </tbody>
         </table>
+
+        <div class="container" style="margin-bottom: 100px;">
+        <h2>General Information of the Project</h2>
+        <table class="ui celled table table-secondary display" style="width: 100%" id="myTable3">
+        <thead>
+            <tr>
+                <th>Project Name</th>
+                <th>Number of Employees</th>
+                <th>Total Tasks</th>
+                <th>Total Completed Tasks</th>
+                <th>Total Undelayed Tasks</th>
+                <th>Total Delayed Tasks</th>
+                <th>Success Rate</th>
+            </tr>
+        </thead>
+        <tbody>
+            @php
+                        $undelayed = $products->where('complation_status_color', 1)->count();
+                        $delayed = $products->where('complation_status_color', 2)->count();
+                        
+                        $completionPercentage = $undelayed > 0 ? round(($undelayed / ($undelayed + $delayed)) * 100, 2) : 0;
+                        
+
+                        $colorClass = '';
+                        if ($completionPercentage >= 0 && $completionPercentage <= 40) {
+                            $colorClass = 'bg-danger';
+                        } elseif ($completionPercentage >= 41 && $completionPercentage <= 70) {
+                            $colorClass = 'bg-warning';
+                        } elseif ($completionPercentage >= 71 && $completionPercentage <= 100) {
+                            $colorClass = 'bg-success';
+                        }
+            @endphp
+
+                <td>{{ $textName->name }}</td>
+                <td>{{ count($usageCount) }}</td>
+                <td>{{ count($products) }}</td>
+                <td>{{ $products->where('status', 'Done')->count() }}</td>
+                <td>{{ $products->where('complation_status_color', 1)->count() }}</td>
+                <td>{{ $products->where('complation_status_color', 2)->count() }}</td>
+                <td class="{{ $colorClass }}">
+                    <div>
+                        <span style="color: rgb(0, 0, 0)">{{ number_format($completionPercentage, 2) }}%</span>
+                    </div>
+                </td>
+        </tbody>
+        </table>
+        </div>
 
 
     </div>
@@ -226,6 +280,16 @@
    
         $(document).ready(function() {
             $('#myTable2').DataTable({
+                dom: 'flitBp',
+                buttons: [{
+                    extend: 'pdfHtml5',
+                    download: 'open'
+                }]
+            });
+        });
+
+        $(document).ready(function() {
+            $('#myTable3').DataTable({
                 dom: 'flitBp',
                 buttons: [{
                     extend: 'pdfHtml5',

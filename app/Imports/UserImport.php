@@ -61,9 +61,12 @@ class UserImport implements ToModel, WithHeadingRow, WithBatchInserts
             $renk = $tarihFarki >= 0 ? '1' : '2';
         }
 
+
+
         if($row['assignees']) {
 
             $user = new Task([
+                'title' => $row['title'] ?? null,
                 'assignees' => $row['assignees'] ?? null,
                 'status' => $row['status'] ?? null,
                 'labels' => $row['labels'] ?? null,
@@ -75,6 +78,7 @@ class UserImport implements ToModel, WithHeadingRow, WithBatchInserts
                 'project_defination_id' => $this->mainTableId
             ]);
 
+     
         return $user;
 
         }

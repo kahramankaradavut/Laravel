@@ -72,10 +72,10 @@
 
     <nav>
         <ul>
-            <li><<a href="javascript:history.back()">Back</a></li>
-            <li><a href="{{ route('importpage') }}">Main Page</a></li>
+            <li><<a href="javascript:history.back()"  class="menubar">Back</a></li>
+            <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
             <li class="dropdown">
-                <a href="#">All Employees ▼</a>
+                <a href="#" class="menubar">All Employees ▼</a>
                 <ul class="dropdown-menu">
                     @foreach ($employeesName as $name)
                         <li><a href="{{ route('person.details', ['personName' => $name->name]) }}">{{ $name->name }}</a></li>
@@ -105,7 +105,7 @@ $photo = $veri[1][39];
     
 
     <div class="container" style="margin-bottom: 100px;">
-        <h2>All Details</h2>
+        <h2>General Details of {{ $personName }}</h2>
         <table class="ui celled table table-secondary" style="width:100%">
             <thead>
                 <tr>
@@ -113,6 +113,7 @@ $photo = $veri[1][39];
                     <th>Name</th>
                     <th>Job Count</th>
                     <th>Completed Tasks</th>
+                    <th>Undelayed Tasks</th>
                     <th>Delayed Tasks</th>
                     <th>Success Rate</th>
                 </tr>
@@ -134,7 +135,8 @@ $photo = $veri[1][39];
                         </td>
                         <td>{{ $personName }}</td>
                         <td>{{ $usageCount }}</td>
-                        <td> {{ $completionStatusCompleted }}</td>
+                        <td>{{ $completionStatusCompleted }}</td>
+                        <td> {{ $completionStatusUndelayed}}</td>
                         <td>{{ $completionStatusDelayed }}</td>
                         <td class="{{ $completionStatusClass }}">
                             <span style="color: rgb(0, 0, 0)">{{ number_format($successRateGeneral, 2) }}%</span>
@@ -146,22 +148,28 @@ $photo = $veri[1][39];
     </div>
 
     <div class="container" style="margin-bottom: 100px;">
-        <h2>Projects</h2>
+        <h2>{{ $personName }}'s Projects</h2>
         <table class="ui celled table table-secondary" style="width:100%">
             <thead>
                 <tr>
                     <th>Project Names</th>
                     <th>Job Counts</th>
                     <th>Completed Tasks</th>
+                    <th>Undelayed Tasks</th>
                     <th>Delayed Tasks</th>
                     <th>Success Rate</th>
                     
                 </tr>
             </thead>
             <tbody>
+
                 @foreach ($projectStatistics as $projectId => $stats)
+
 @php
+
         $projectName = $abc->where('project_defination_id', $projectId)->first()->projectDefination->name;
+        $projectUid = $abc->where('project_defination_id', $projectId)->first()->projectDefination->uid;
+        
                     if ($stats['success_rate'] >= 0 && $stats['success_rate'] <= 40) {
                         $completionStatusClass = 'bg-danger';
                     } elseif ($stats['success_rate'] >= 41 && $stats['success_rate'] <= 70) {
@@ -171,10 +179,13 @@ $photo = $veri[1][39];
                     }
 @endphp
                 <tr>  
-                    
-                    <td>{{ $projectName }}</td>
+                    <td>
+                        <a class="custom-link"
+                            href="{{ route('show.table', $projectUid) }}">{{ $projectName }}</a>
+                    </td>
                     <td>{{ $stats['total_tasks'] }}</td>
                     <td>{{ $stats['completed_tasks'] }}</td>
+                    <td>{{ $stats['undelayed_tasks'] }}</td>
                     <td>{{ $stats['delayed_tasks'] }}</td>
                     <td class="{{ $completionStatusClass }}">
                         <span style="color: rgb(0, 0, 0)">{{ number_format($stats['success_rate'], 2) }}%</span>

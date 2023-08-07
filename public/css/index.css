@@ -3,15 +3,22 @@ color:#f8f8f8;
 background-repeat: repeat;
 background-color: #313030;
 }
-.menubarColor {
-color: #353535;
+
+.menubar:hover {
+    color: white;
 }
 
-.nav-pills .nav-link:hover {
-background-color: #007bff; /* Yeni arka plan rengi */
-color: #fff; /* Yeni metin rengi */
-/* Diğer stil değişiklikleri */
+/* .nav-pills .nav-link:hover {
+background-color: #525457; 
+color: #fff; 
+
+} */
+
+.menuButton {
+color: white;
 }
+
+
 .header {
 background-color: #d8d7d7;
 padding: 20px;
@@ -38,36 +45,23 @@ float: right;
 
 .buttons-pdf {
 background-color: white;
-/* Arkaplan rengi */
 border: none;
-/* Kenarlık olmadan */
 color: #333;
-/* Yazı rengi */
 padding: 10px 20px;
-/* Buton içeriği ile kenar arasındaki boşluk */
 text-align: center;
-/* Yazıyı ortala */
 text-decoration: none;
 display: inline-block;
 font-size: 16px;
-/* Yazı boyutu */
 margin: 4px 2px;
-/* Butonlar arasındaki boşluk */
 cursor: pointer;
-/* Farenin üzerine geldiğinde el işareti şeklini alır */
 border-radius: 4px;
-/* Köşeleri yuvarlar */
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
-
 
 .dataTables_length{
     margin-top: 10px;
 }
-/* 
-.dataTables_filter{
-    margin-top: 10px;
-} */
+
 
 .dt-buttons{
     text-align: center;
@@ -100,6 +94,7 @@ margin-bottom: 30px;
 text-align: center;
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
+
 }
 h2{
 font-size: 35px;
@@ -151,9 +146,7 @@ font-weight: bold;
 
 .white-text{
 color: white;
-
 }
-
 
 .custom-button {
 background-color: #228b22;
@@ -190,54 +183,25 @@ font-weight: bold;
 }
 
 .custom-link {
-color: black; /* Yeni rengin hex kodunu buraya yazın */
+color: black; 
 }
 
 .dropdown{
 position: relative;
 }
 
-
-
-
 .dropdown-menu{
     margin-top: 6px;
-max-height: 150px; /* 5 seçeneğe göre 150px olarak ayarlanabilir */
+max-height: 150px; 
 overflow-y: auto;
-
 }
 
 
-/* #copyLinkButton {
-    background-color: #d8d7d7;
-    color: black;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    
-}
-
-#copyLinkButton:hover {
-    background-color: #8b8b8b;
-}
-
-.button-container {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-top: 10px; 
-    margin-bottom: 10px;
-    padding-right: 65px;
-    
-} */
-
-/* Uyarı mesajının stilini belirleyelim */
 .notification-message {
     display: none;
     background-color: #b16706;
     color: #fff;
-    border: 2px solid #fff; /* Border özelliği ile çerçeve ekleyelim */
+    border: 2px solid #fff;
     border-radius: 5px;
     padding: 10px;
     position: fixed;
