@@ -8,11 +8,9 @@ background-color: #313030;
     color: white;
 }
 
-/* .nav-pills .nav-link:hover {
-background-color: #525457; 
-color: #fff; 
-
-} */
+.distance-table {
+    padding-bottom: 50px;
+}
 
 .menuButton {
 color: white;

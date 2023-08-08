@@ -74,6 +74,8 @@
         <ul>
             <li><<a href="javascript:history.back()"  class="menubar">Back</a></li>
             <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
+            <li><a href="{{ route('all.projects') }}" class="menubar">Details of All Projects</a></li>
+            <li><a href="{{ route('all.employees') }}" class="menubar">Details of All Employees</a></li>
             <li class="dropdown">
                 <a href="#" class="menubar">All Employees ▼</a>
                 <ul class="dropdown-menu">

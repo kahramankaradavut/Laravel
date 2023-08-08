@@ -80,8 +80,8 @@
         <ul>
             <li><a id="copyLinkButton" href="{{ route('show.table', $textInput) }}" class="menubar">Copy Page Link</a></li>
             <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
-            <li><a href="{{ route('all.projects') }}">Details of All Projects</a></li>
-            <li><a href="{{ route('all.employees') }}">Details of All Employees</a></li>
+            <li><a href="{{ route('all.projects') }}" class="menubar">Details of All Projects</a></li>
+            <li><a href="{{ route('all.employees') }}" class="menubar">Details of All Employees</a></li>
             <li class="dropdown">
                 <a href="#" class="menubar">All Projects ▼</a>
                 <ul class="dropdown-menu">
@@ -90,7 +90,6 @@
                     @endforeach
                 </ul>
             </li>
-           
         </ul>
     </nav>
 
@@ -158,7 +157,7 @@
     <!-- Başarı Tablosu -->
     <div class="container" style="margin-bottom: 100px;">
         <h2>Employee Success Table</h2>
-        <table class="ui celled table table-secondary display" style="width:100%" id="myTable2">
+        <table class="ui celled table table-secondary" style="width:100%" id="myTable2">
             <thead>
                 <tr>
 
@@ -207,8 +206,10 @@
                 @endforeach
             </tbody>
         </table>
+    </div>
 
-        <div class="container" style="margin-bottom: 100px;">
+
+    <div class="container" style="margin-bottom: 100px;">
         <h2>General Information of the Project</h2>
         <table class="ui celled table table-secondary display" style="width: 100%" id="myTable3">
         <thead>
@@ -255,9 +256,6 @@
         </table>
         </div>
 
-
-    </div>
-
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/dataTables.semanticui.min.js"></script>
@@ -290,7 +288,7 @@
 
         $(document).ready(function() {
             $('#myTable3').DataTable({
-                dom: 'flitBp',
+                dom: 'tB',
                 buttons: [{
                     extend: 'pdfHtml5',
                     download: 'open'

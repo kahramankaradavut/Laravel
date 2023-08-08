@@ -170,7 +170,8 @@ class TasksController extends Controller
            
         }
 
+        $inputs = ProjectDefination::orderBy('uid', 'desc')->get();
 
-        return view('products.allEmployees', compact('employeesDetails','successRate','jobCount','completionStatusUndelayed','comlationStatusDelayed','completedTasks','name'));
+        return view('products.allEmployees', compact('employeesDetails','successRate','jobCount','completionStatusUndelayed','comlationStatusDelayed','completedTasks','name','inputs'));
     }
 }

@@ -77,6 +77,15 @@
                 <<a href="javascript:history.back()" class="menubar">Back</a>
             </li>
             <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
+            <li><a href="{{ route('all.projects') }}" class="menubar">Details of All Projects</a></li>
+            <li class="dropdown">
+                <a href="#" class="menubar">All Projects ▼</a>
+                <ul class="dropdown-menu">
+                    @foreach ($inputs as $input)
+                        <li><a href="{{ route('show.table', $input->uid) }}">{{ $input->name }}</a></li>
+                    @endforeach
+                </ul>
+            </li>
         </ul>
     </nav>
 
@@ -159,6 +168,8 @@
             });
         });
     </script>
+        <div style="height: 1px;"></div>
+
 </body>
 
 </html>

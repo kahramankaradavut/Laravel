@@ -77,8 +77,8 @@
         <ul>
             <li><a id="copyLinkButton" href="{{ route('show.table', $uidURL) }}" class="menubar">Copy Page Link</a></li>
             <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
-            <li><a href="{{ route('all.projects') }}">Details of All Projects</a></li>
-            <li><a href="{{ route('all.employees') }}">Details of All Employees</a></li>
+            <li><a href="{{ route('all.projects') }}" class="menubar">Details of All Projects</a></li>
+            <li><a href="{{ route('all.employees') }}" class="menubar">Details of All Employees</a></li>
             <li class="dropdown">
                 <a href="#" class="menubar">All Projects ▼</a>
                 <ul class="dropdown-menu">
@@ -87,7 +87,6 @@
                     @endforeach
                 </ul>
             </li>
-            
         </ul>
     </nav>
 
