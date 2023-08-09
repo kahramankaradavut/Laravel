@@ -95,7 +95,7 @@
         <h1>Project Name: {{ $textInput }}</h1>
 
 
-        <div class="container" style="margin-bottom: 100px;">
+        <div class="container" style="margin-bottom: 10px; margin-top: 10px">
             <table class="ui celled table table-secondary display" style="width: 100%" id="myTable3">
             <thead>
                 <tr>

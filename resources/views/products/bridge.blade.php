@@ -103,7 +103,7 @@
         <button id="deleteButton" class="btn bg-danger" style="color: #fff; margin-bottom: 10px;">Delete Project</button>
 
 
-        <div class="container" style="margin-bottom: 100px;">
+        <div class="container" style="margin-bottom: 10px;">
             <table class="ui celled table table-secondary display" style="width: 100%" id="myTable3">
                 <thead>
                     <tr>
