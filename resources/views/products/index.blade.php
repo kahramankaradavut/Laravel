@@ -75,7 +75,7 @@
 <body>
     <nav>
         <ul>
-            <li><a id="copyLinkButton" href="{{ route('show.table', $uidURL) }}" class="menubar">Copy Page Link</a></li>
+            <li><a id="copyLinkButton" class="menubar">Copy Page Link</a>
             <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
             <li><a href="{{ route('all.projects') }}" class="menubar">Details of All Projects</a></li>
             <li><a href="{{ route('all.employees') }}" class="menubar">Details of All Employees</a></li>
@@ -97,35 +97,34 @@
 
         <div class="container" style="margin-bottom: 10px; margin-top: 10px">
             <table class="ui celled table table-secondary display" style="width: 100%" id="myTable3">
-            <thead>
-                <tr>
-                    <th>Project Name</th>
-                    <th>Number of Employees</th>
-                    <th>Total Tasks</th>
-                    <th>Total Completed Tasks</th>
-                    <th>Total Undelayed Tasks</th>
-                    <th>Total Delayed Tasks</th>
-                    <th>Success Rate</th>
-                </tr>
-            </thead>
-            <tbody>
-                @php
-                            $undelayed = $products->where('complation_status_color', 1)->count();
-                            $delayed = $products->where('complation_status_color', 2)->count();
-                            
-                            $completionPercentage = $undelayed > 0 ? round(($undelayed / ($undelayed + $delayed)) * 100, 2) : 0;
-                            
-    
-                            $colorClass = '';
-                            if ($completionPercentage >= 0 && $completionPercentage <= 40) {
-                                $colorClass = 'bg-danger';
-                            } elseif ($completionPercentage >= 41 && $completionPercentage <= 70) {
-                                $colorClass = 'bg-warning';
-                            } elseif ($completionPercentage >= 71 && $completionPercentage <= 100) {
-                                $colorClass = 'bg-success';
-                            }
-                @endphp
-    
+                <thead>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Number of Employees</th>
+                        <th>Total Tasks</th>
+                        <th>Total Completed Tasks</th>
+                        <th>Total Undelayed Tasks</th>
+                        <th>Total Delayed Tasks</th>
+                        <th>Success Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $undelayed = $products->where('complation_status_color', 1)->count();
+                        $delayed = $products->where('complation_status_color', 2)->count();
+                        
+                        $completionPercentage = $undelayed > 0 ? round(($undelayed / ($undelayed + $delayed)) * 100, 2) : 0;
+                        
+                        $colorClass = '';
+                        if ($completionPercentage >= 0 && $completionPercentage <= 40) {
+                            $colorClass = 'bg-danger';
+                        } elseif ($completionPercentage >= 41 && $completionPercentage <= 70) {
+                            $colorClass = 'bg-warning';
+                        } elseif ($completionPercentage >= 71 && $completionPercentage <= 100) {
+                            $colorClass = 'bg-success';
+                        }
+                    @endphp
+
                     <td>{{ $textInput }}</td>
                     <td>{{ count($usageCount) }}</td>
                     <td>{{ count($products) }}</td>
@@ -137,9 +136,9 @@
                             <span style="color: rgb(0, 0, 0)">{{ number_format($completionPercentage, 2) }}%</span>
                         </div>
                     </td>
-            </tbody>
+                </tbody>
             </table>
-            </div>
+        </div>
 
     </div>
     </div>
@@ -214,7 +213,6 @@
                         
                         $completionPercentage = $undelayed > 0 ? round(($undelayed / ($undelayed + $delayed)) * 100, 2) : 0;
                         
-              
                         $colorClass = '';
                         if ($completionPercentage >= 0 && $completionPercentage <= 40) {
                             $colorClass = 'bg-danger';
@@ -244,51 +242,51 @@
             </tbody>
         </table>
 
-        
 
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.5/js/dataTables.semanticui.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $('#myTable').DataTable({
-                dom: 'flitBp',
-                buttons: [{
-                    extend: 'pdfHtml5',
-                    download: 'open'
-                }]
+        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+        <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.5/js/dataTables.semanticui.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                $('#myTable').DataTable({
+                    dom: 'flitBp',
+                    buttons: [{
+                        extend: 'pdfHtml5',
+                        download: 'open'
+                    }]
+                });
             });
-        });
 
-        $(document).ready(function() {
-            $('#myTable2').DataTable({
-                dom: 'flitBp',
-                buttons: [{
-                    extend: 'pdfHtml5',
-                    download: 'open'
-                }]
+            $(document).ready(function() {
+                $('#myTable2').DataTable({
+                    dom: 'flitBp',
+                    buttons: [{
+                        extend: 'pdfHtml5',
+                        download: 'open'
+                    }]
+                });
             });
-        });
 
-        $(document).ready(function() {
-            $('#myTable3').DataTable({
-                dom: 'tB',
-                buttons: [{
-                    extend: 'pdfHtml5',
-                    download: 'open'
-                }]
+            $(document).ready(function() {
+                $('#myTable3').DataTable({
+                    dom: 'tB',
+                    buttons: [{
+                        extend: 'pdfHtml5',
+                        download: 'open'
+                    }]
+                });
             });
-        });
 
 
-        document.getElementById("copyLinkButton").addEventListener("click", function() {
-            var linkToCopy = this.getAttribute("href");
+            document.getElementById("copyLinkButton").addEventListener("click", function() {
+            var linkToCopy = "{{ route('show.table', $textInput) }}"
             var tempInput = document.createElement("input");
             document.body.appendChild(tempInput);
             tempInput.value = linkToCopy;
@@ -297,17 +295,27 @@
             document.body.removeChild(tempInput);
 
 
-            var notification = document.getElementById("notification");
-            notification.innerText = "Link Copied!";
-            notification.style.display = "block";
+            var alertTimeout = 2000; // 1 saniye
 
+                var alertElement = document.createElement("div");
+                alertElement.style.position = "fixed";
+                alertElement.style.top = "50%";
+                alertElement.style.left = "50%";
+                alertElement.style.transform = "translate(-50%, -50%)";
+                alertElement.style.backgroundColor = "#28a745";
+                alertElement.style.padding = "10px";
+                alertElement.style.color = "white";
+                alertElement.style.borderRadius = "5px";
+                alertElement.style.boxShadow = "0px 0px 5px rgba(0, 0, 0, 0.5)";
+                alertElement.textContent = "Link Copied!";
+                document.body.appendChild(alertElement);
 
-            setTimeout(function() {
-                notification.style.display = "none";
-            }, 3000);
+                setTimeout(function() {
+                    alertElement.remove();
+                }, alertTimeout);
         });
-    </script>
-    <div style="height: 1px;"></div>
+        </script>
+        <div style="height: 1px;"></div>
 </body>
 
 </html>
