@@ -28,24 +28,24 @@ class UserImport implements ToModel, WithHeadingRow, WithBatchInserts
     {
         //dd($row);
         $baslamaTarihi = null;
-        if (!empty($row['start_date'])) {
-            $dateBaslama = Carbon::createFromFormat('M d, Y', $row['start_date']);
+        if (!empty($row[env('START_DATE')])) {
+            $dateBaslama = Carbon::createFromFormat('M d, Y', $row[env('START_DATE')]);
             $baslamaTarihi = $dateBaslama->format('Y.m.d');
         } else {
             $baslamaTarihi = null;
         }
 
         $bitisTarihi = null;
-        if (!empty($row['closed_date'])) {
-            $dateBitis = Carbon::createFromFormat('M d, Y', $row['closed_date']);
+        if (!empty($row[env('END_DATE')])) {
+            $dateBitis = Carbon::createFromFormat('M d, Y', $row[env('END_DATE')]);
             $bitisTarihi = $dateBitis->format('Y.m.d');
         } else {
             $bitisTarihi = null;
         }
 
         $sonaErmeTarihi = null;
-        if (!empty($row['schedule_date'])) {
-            $dateSonaErme = Carbon::createFromFormat('M d, Y', $row['schedule_date']);
+        if (!empty($row[env('DUE_DATE')])) {
+            $dateSonaErme = Carbon::createFromFormat('M d, Y', $row[env('DUE_DATE')]);
             $sonaErmeTarihi = $dateSonaErme->format('Y.m.d');
         } else {
             $sonaErmeTarihi = null;
@@ -63,13 +63,13 @@ class UserImport implements ToModel, WithHeadingRow, WithBatchInserts
 
 
 
-        if($row['assignees']) {
+        if($row[env('ASSIGNEES')]) {
 
             $user = new Task([
-                'title' => $row['title'] ?? null,
-                'assignees' => $row['assignees'] ?? null,
-                'status' => $row['status'] ?? null,
-                'labels' => $row['labels'] ?? null,
+                'title' => $row[env('TITLE')] ?? null,
+                'assignees' => $row[env('ASSIGNEES')] ?? null,
+                'status' => $row[env('STATUS')] ?? null,
+                'labels' => $row[env('LABELS')] ?? null,
                 'start_date' => $baslamaTarihi ?? null,
                 'end_date' => $bitisTarihi ?? null,
                 'due_date' => $sonaErmeTarihi ?? null,
