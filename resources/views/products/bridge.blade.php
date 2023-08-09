@@ -2,8 +2,8 @@
 <html>
 
 <head>
-    {{-- <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1"> --}}
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css">
@@ -78,7 +78,8 @@
 
     <nav>
         <ul>
-            <li><a id="copyLinkButton" href="{{ route('show.table', $textInput) }}" class="menubar">Copy Page Link</a></li>
+            <li><a id="copyLinkButton" class="menubar">Copy Page Link</a>
+            </li>
             <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
             <li><a href="{{ route('all.projects') }}" class="menubar">Details of All Projects</a></li>
             <li><a href="{{ route('all.employees') }}" class="menubar">Details of All Employees</a></li>
@@ -99,12 +100,59 @@
         <h1>Project Name: {{ $textName->name }}</h1>
         <h4>Upload Date: {{ $uploadDate }}</h4>
 
+        <button id="deleteButton" class="btn bg-danger" style="color: #fff; margin-bottom: 10px;">Delete Project</button>
+
+
+        <div class="container" style="margin-bottom: 100px;">
+            <table class="ui celled table table-secondary display" style="width: 100%" id="myTable3">
+                <thead>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Number of Employees</th>
+                        <th>Total Tasks</th>
+                        <th>Total Completed Tasks</th>
+                        <th>Total Undelayed Tasks</th>
+                        <th>Total Delayed Tasks</th>
+                        <th>Success Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $undelayed = $products->where('complation_status_color', 1)->count();
+                        $delayed = $products->where('complation_status_color', 2)->count();
+                        
+                        $completionPercentage = $undelayed > 0 ? round(($undelayed / ($undelayed + $delayed)) * 100, 2) : 0;
+                        
+                        $colorClass = '';
+                        if ($completionPercentage >= 0 && $completionPercentage <= 40) {
+                            $colorClass = 'bg-danger';
+                        } elseif ($completionPercentage >= 41 && $completionPercentage <= 70) {
+                            $colorClass = 'bg-warning';
+                        } elseif ($completionPercentage >= 71 && $completionPercentage <= 100) {
+                            $colorClass = 'bg-success';
+                        }
+                    @endphp
+
+                    <td>{{ $textName->name }}</td>
+                    <td>{{ count($usageCount) }}</td>
+                    <td>{{ count($products) }}</td>
+                    <td>{{ $products->where('status', 'Done')->count() }}</td>
+                    <td>{{ $products->where('complation_status_color', 1)->count() }}</td>
+                    <td>{{ $products->where('complation_status_color', 2)->count() }}</td>
+                    <td class="{{ $colorClass }}">
+                        <div>
+                            <span style="color: rgb(0, 0, 0)">{{ number_format($completionPercentage, 2) }}%</span>
+                        </div>
+                    </td>
+                </tbody>
+            </table>
+        </div>
 
     </div>
 
-  
 
-    
+
+
 
     <!-- Ürün listesi tablosu -->
     <div class="container" style="margin-bottom: 100px;">
@@ -156,7 +204,7 @@
 
     <!-- Başarı Tablosu -->
     <div class="container" style="margin-bottom: 100px;">
-        <h2>Employee Success Table</h2>
+        <h2>Employee Report Table</h2>
         <table class="ui celled table table-secondary" style="width:100%" id="myTable2">
             <thead>
                 <tr>
@@ -179,7 +227,6 @@
                         
                         $completionPercentage = $undelayed > 0 ? round(($undelayed / ($undelayed + $delayed)) * 100, 2) : 0;
                         
-
                         $colorClass = '';
                         if ($completionPercentage >= 0 && $completionPercentage <= 40) {
                             $colorClass = 'bg-danger';
@@ -209,52 +256,7 @@
     </div>
 
 
-    <div class="container" style="margin-bottom: 100px;">
-        <h2>General Information of the Project</h2>
-        <table class="ui celled table table-secondary display" style="width: 100%" id="myTable3">
-        <thead>
-            <tr>
-                <th>Project Name</th>
-                <th>Number of Employees</th>
-                <th>Total Tasks</th>
-                <th>Total Completed Tasks</th>
-                <th>Total Undelayed Tasks</th>
-                <th>Total Delayed Tasks</th>
-                <th>Success Rate</th>
-            </tr>
-        </thead>
-        <tbody>
-            @php
-                        $undelayed = $products->where('complation_status_color', 1)->count();
-                        $delayed = $products->where('complation_status_color', 2)->count();
-                        
-                        $completionPercentage = $undelayed > 0 ? round(($undelayed / ($undelayed + $delayed)) * 100, 2) : 0;
-                        
 
-                        $colorClass = '';
-                        if ($completionPercentage >= 0 && $completionPercentage <= 40) {
-                            $colorClass = 'bg-danger';
-                        } elseif ($completionPercentage >= 41 && $completionPercentage <= 70) {
-                            $colorClass = 'bg-warning';
-                        } elseif ($completionPercentage >= 71 && $completionPercentage <= 100) {
-                            $colorClass = 'bg-success';
-                        }
-            @endphp
-
-                <td>{{ $textName->name }}</td>
-                <td>{{ count($usageCount) }}</td>
-                <td>{{ count($products) }}</td>
-                <td>{{ $products->where('status', 'Done')->count() }}</td>
-                <td>{{ $products->where('complation_status_color', 1)->count() }}</td>
-                <td>{{ $products->where('complation_status_color', 2)->count() }}</td>
-                <td class="{{ $colorClass }}">
-                    <div>
-                        <span style="color: rgb(0, 0, 0)">{{ number_format($completionPercentage, 2) }}%</span>
-                    </div>
-                </td>
-        </tbody>
-        </table>
-        </div>
 
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
@@ -264,7 +266,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-    
+
     <script>
         $(document).ready(function() {
             $('#myTable').DataTable({
@@ -275,7 +277,7 @@
                 }]
             });
         });
-   
+
         $(document).ready(function() {
             $('#myTable2').DataTable({
                 dom: 'flitBp',
@@ -297,7 +299,7 @@
         });
 
         document.getElementById("copyLinkButton").addEventListener("click", function() {
-            var linkToCopy = this.getAttribute("href");
+            var linkToCopy = "{{ route('show.table', $textInput) }}"
             var tempInput = document.createElement("input");
             document.body.appendChild(tempInput);
             tempInput.value = linkToCopy;
@@ -306,14 +308,85 @@
             document.body.removeChild(tempInput);
 
 
-            var notification = document.getElementById("notification");
-            notification.innerText = "Link Copied!";
-            notification.style.display = "block";
+            var alertTimeout = 2000; // 1 saniye
+
+                var alertElement = document.createElement("div");
+                alertElement.style.position = "fixed";
+                alertElement.style.top = "50%";
+                alertElement.style.left = "50%";
+                alertElement.style.transform = "translate(-50%, -50%)";
+                alertElement.style.backgroundColor = "#28a745";
+                alertElement.style.padding = "10px";
+                alertElement.style.color = "white";
+                alertElement.style.borderRadius = "5px";
+                alertElement.style.boxShadow = "0px 0px 5px rgba(0, 0, 0, 0.5)";
+                alertElement.textContent = "Link Copied!";
+                document.body.appendChild(alertElement);
+
+                setTimeout(function() {
+                    alertElement.remove();
+                }, alertTimeout);
+        });
+
+        document.getElementById("deleteButton").addEventListener("click", function() {
+
+            var password = prompt("Şifreyi Girin:");
+            var project_name = "{{ $textName->name }}";
+
+            if (password === "{{ $passwordCheck }}") {
+
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+                $.ajax({
+                    url: '{{ route('deleteDataProject') }}',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    data: {
+                        password: password,
+                        project_name: project_name,
+                    },
+                    success: function(response) {
+                        alert('Project Deleted Successfully!');
 
 
-            setTimeout(function() {
-                notification.style.display = "none";
-            }, 3000);
+                        setTimeout(function() {
+                            window.location.href = '{{ route('all.projects') }}';
+                        }, 1000);
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Something went wrong ' + error);
+
+                        setTimeout(function() {
+                            window.location.href = '{{ route('all.projects') }}';
+                        }, 1000);
+                    }
+                });
+
+
+
+            } else {
+                var alertTimeout = 2000; // 1 saniye
+
+                var alertElement = document.createElement("div");
+                alertElement.style.position = "fixed";
+                alertElement.style.top = "50%";
+                alertElement.style.left = "50%";
+                alertElement.style.transform = "translate(-50%, -50%)";
+                alertElement.style.backgroundColor = "#dc3545";
+                alertElement.style.padding = "10px";
+                alertElement.style.color = "white";
+                alertElement.style.borderRadius = "5px";
+                alertElement.style.boxShadow = "0px 0px 5px rgba(0, 0, 0, 0.5)";
+                alertElement.textContent = "Wrong Password!";
+                document.body.appendChild(alertElement);
+
+                setTimeout(function() {
+                    alertElement.remove();
+                }, alertTimeout);
+            }
+
         });
     </script>
 

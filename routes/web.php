@@ -17,4 +17,9 @@ Route::get('/view-project/{textInput?}', [TasksController::class, 'showTable'])-
 Route::get('/person-details/{personName?}', [TasksController::class, 'showPersonDetails'])->name('person.details');
 Route::get('/all-projects', [TasksController::class, 'allProjects'])->name('all.projects');
 Route::get('/all-employees', [TasksController::class, 'allEmployees'])->name('all.employees');
+Route::post('/delete-data-employee', [TasksController::class, 'deleteDataEmployee'])->name('dataDeleteEmployee');
+Route::post('/delete-data-project', [TasksController::class, 'deleteDataProject'])->name('deleteDataProject');
+
+
+
 

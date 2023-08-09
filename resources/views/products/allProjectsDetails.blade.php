@@ -79,6 +79,7 @@
                 <<a href="javascript:history.back()" class="menubar">Back</a>
             </li>
             <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
+            <li><a href="{{ route('all.employees') }}" class="menubar">Details of All Employees</a></li>
         </ul>
     </nav>
 

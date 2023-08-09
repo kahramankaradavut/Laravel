@@ -93,13 +93,62 @@
 
     <div class="header">
         <h1>Project Name: {{ $textInput }}</h1>
+
+
+        <div class="container" style="margin-bottom: 100px;">
+            <table class="ui celled table table-secondary display" style="width: 100%" id="myTable3">
+            <thead>
+                <tr>
+                    <th>Project Name</th>
+                    <th>Number of Employees</th>
+                    <th>Total Tasks</th>
+                    <th>Total Completed Tasks</th>
+                    <th>Total Undelayed Tasks</th>
+                    <th>Total Delayed Tasks</th>
+                    <th>Success Rate</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                            $undelayed = $products->where('complation_status_color', 1)->count();
+                            $delayed = $products->where('complation_status_color', 2)->count();
+                            
+                            $completionPercentage = $undelayed > 0 ? round(($undelayed / ($undelayed + $delayed)) * 100, 2) : 0;
+                            
+    
+                            $colorClass = '';
+                            if ($completionPercentage >= 0 && $completionPercentage <= 40) {
+                                $colorClass = 'bg-danger';
+                            } elseif ($completionPercentage >= 41 && $completionPercentage <= 70) {
+                                $colorClass = 'bg-warning';
+                            } elseif ($completionPercentage >= 71 && $completionPercentage <= 100) {
+                                $colorClass = 'bg-success';
+                            }
+                @endphp
+    
+                    <td>{{ $textInput }}</td>
+                    <td>{{ count($usageCount) }}</td>
+                    <td>{{ count($products) }}</td>
+                    <td>{{ $products->where('status', 'Done')->count() }}</td>
+                    <td>{{ $products->where('complation_status_color', 1)->count() }}</td>
+                    <td>{{ $products->where('complation_status_color', 2)->count() }}</td>
+                    <td class="{{ $colorClass }}">
+                        <div>
+                            <span style="color: rgb(0, 0, 0)">{{ number_format($completionPercentage, 2) }}%</span>
+                        </div>
+                    </td>
+            </tbody>
+            </table>
+            </div>
+
+    </div>
     </div>
 
 
 
     <!-- Ürün listesi tablosu -->
     <div class="container" style="margin-bottom: 100px;">
-        <h2>Tasks List</h2>
+        <h2>Assignment Table</h2>
 
         <table class="ui celled table" id="myTable" style="width:100%">
             <!-- Tablo başlıkları -->
@@ -144,7 +193,7 @@
 
     <!-- Başarı Tablosu -->
     <div class="container" style="margin-bottom: 100px;">
-        <h2>Person Report Table</h2>
+        <h2>Employee Report Table</h2>
         <table class="ui celled table" style="width:100%" id="myTable2">
             <thead>
                 <tr>
@@ -195,54 +244,7 @@
             </tbody>
         </table>
 
-        <div class="container" style="margin-bottom: 100px;">
-            <h2>General Information of the Project</h2>
-            <table class="ui celled table table-secondary display" style="width: 100%" id="myTable3">
-            <thead>
-                <tr>
-                    <th>Project Name</th>
-                    <th>Number of Employees</th>
-                    <th>Total Tasks</th>
-                    <th>Total Completed Tasks</th>
-                    <th>Total Undelayed Tasks</th>
-                    <th>Total Delayed Tasks</th>
-                    <th>Success Rate</th>
-                </tr>
-            </thead>
-            <tbody>
-                @php
-                            $undelayed = $products->where('complation_status_color', 1)->count();
-                            $delayed = $products->where('complation_status_color', 2)->count();
-                            
-                            $completionPercentage = $undelayed > 0 ? round(($undelayed / ($undelayed + $delayed)) * 100, 2) : 0;
-                            
-    
-                            $colorClass = '';
-                            if ($completionPercentage >= 0 && $completionPercentage <= 40) {
-                                $colorClass = 'bg-danger';
-                            } elseif ($completionPercentage >= 41 && $completionPercentage <= 70) {
-                                $colorClass = 'bg-warning';
-                            } elseif ($completionPercentage >= 71 && $completionPercentage <= 100) {
-                                $colorClass = 'bg-success';
-                            }
-                @endphp
-    
-                    <td>{{ $textInput }}</td>
-                    <td>{{ count($usageCount) }}</td>
-                    <td>{{ count($products) }}</td>
-                    <td>{{ $products->where('status', 'Done')->count() }}</td>
-                    <td>{{ $products->where('complation_status_color', 1)->count() }}</td>
-                    <td>{{ $products->where('complation_status_color', 2)->count() }}</td>
-                    <td class="{{ $colorClass }}">
-                        <div>
-                            <span style="color: rgb(0, 0, 0)">{{ number_format($completionPercentage, 2) }}%</span>
-                        </div>
-                    </td>
-            </tbody>
-            </table>
-            </div>
-
-    </div>
+        
 
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
@@ -276,7 +278,7 @@
 
         $(document).ready(function() {
             $('#myTable3').DataTable({
-                dom: 'flitBp',
+                dom: 'tB',
                 buttons: [{
                     extend: 'pdfHtml5',
                     download: 'open'
