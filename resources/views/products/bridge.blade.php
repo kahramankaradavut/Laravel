@@ -84,7 +84,7 @@
             <li><a href="{{ route('all.projects') }}" class="menubar">Details of All Projects</a></li>
             <li><a href="{{ route('all.employees') }}" class="menubar">Details of All Employees</a></li>
             <li class="dropdown">
-                <a href="#" class="menubar">All Projects ▼</a>
+                <a class="menubar">All Projects ▼</a>
                 <ul class="dropdown-menu">
                     @foreach ($inputs as $input)
                         <li><a href="{{ route('show.table', $input->uid) }}">{{ $input->name }}</a></li>

@@ -26,45 +26,37 @@ class UserImport implements ToModel, WithHeadingRow, WithBatchInserts
     
     public function model(array $row)
     {
-        //dd($row);
         $baslamaTarihi = null;
         if (!empty($row[env('START_DATE')])) {
             $dateBaslama = Carbon::createFromFormat('M d, Y', $row[env('START_DATE')]);
             $baslamaTarihi = $dateBaslama->format('Y.m.d');
-        } else {
-            $baslamaTarihi = null;
         }
-
+    
         $bitisTarihi = null;
         if (!empty($row[env('END_DATE')])) {
             $dateBitis = Carbon::createFromFormat('M d, Y', $row[env('END_DATE')]);
             $bitisTarihi = $dateBitis->format('Y.m.d');
-        } else {
-            $bitisTarihi = null;
         }
-
+        
         $sonaErmeTarihi = null;
+        $dateSonaErme = null; // Burada $dateSonaErme'yi tanımlıyoruz
         if (!empty($row[env('DUE_DATE')])) {
             $dateSonaErme = Carbon::createFromFormat('M d, Y', $row[env('DUE_DATE')]);
             $sonaErmeTarihi = $dateSonaErme->format('Y.m.d');
-        } else {
-            $sonaErmeTarihi = null;
         }
-
+    
         $tarihFarki = null;
         $renk = null;
-        if ($bitisTarihi && $dateSonaErme) {
+    
+        if ($bitisTarihi && $sonaErmeTarihi) { // $dateSonaErme yerine $sonaErmeTarihi kullanıyoruz
             $tarihFarki = $dateSonaErme->diffInDays($dateBitis);
             if ($dateBitis > $dateSonaErme) {
                 $tarihFarki *= -1;
             }
             $renk = $tarihFarki >= 0 ? '1' : '2';
         }
-
-
-
+    
         if($row[env('ASSIGNEES')]) {
-
             $user = new Task([
                 'title' => $row[env('TITLE')] ?? null,
                 'assignees' => $row[env('ASSIGNEES')] ?? null,
@@ -77,12 +69,11 @@ class UserImport implements ToModel, WithHeadingRow, WithBatchInserts
                 'complation_status_color' => $renk ?? null,
                 'project_defination_id' => $this->mainTableId
             ]);
-
-     
-        return $user;
-
+    
+            return $user;
         }
     }
+    
 
     public function batchSize(): int
     {
