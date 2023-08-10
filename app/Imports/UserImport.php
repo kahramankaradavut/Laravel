@@ -39,7 +39,7 @@ class UserImport implements ToModel, WithHeadingRow, WithBatchInserts
         }
         
         $sonaErmeTarihi = null;
-        $dateSonaErme = null; // Burada $dateSonaErme'yi tanımlıyoruz
+        $dateSonaErme = null; 
         if (!empty($row[env('DUE_DATE')])) {
             $dateSonaErme = Carbon::createFromFormat('M d, Y', $row[env('DUE_DATE')]);
             $sonaErmeTarihi = $dateSonaErme->format('Y.m.d');
@@ -48,7 +48,7 @@ class UserImport implements ToModel, WithHeadingRow, WithBatchInserts
         $tarihFarki = null;
         $renk = null;
     
-        if ($bitisTarihi && $sonaErmeTarihi) { // $dateSonaErme yerine $sonaErmeTarihi kullanıyoruz
+        if ($bitisTarihi && $sonaErmeTarihi) { 
             $tarihFarki = $dateSonaErme->diffInDays($dateBitis);
             if ($dateBitis > $dateSonaErme) {
                 $tarihFarki *= -1;
