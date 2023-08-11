@@ -7,6 +7,7 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Carbon\Carbon;
+use App\Imports\envNameFormatter;
 
 class UserImport implements ToModel, WithHeadingRow, WithBatchInserts
 {
@@ -24,24 +25,40 @@ class UserImport implements ToModel, WithHeadingRow, WithBatchInserts
         
     }
     
+public function envNameFormatter ($name) {
+ $name = str_replace(' ','_', $name);
+    return strtolower($name);
+}
+
     public function model(array $row)
     {
+        $dueDateColumn = env("DUE_DATE", 'schedule_date');
+
+        $startDate = self::envNameFormatter(env("START_DATE"));
+        $endDate = self::envNameFormatter(env("END_DATE"));
+        $dueDate = self::envNameFormatter(env("DUE_DATE"));
+        $title = self::envNameFormatter(env("TITLE"));
+        $assignees = self::envNameFormatter(env("ASSIGNEES"));
+        $status = self::envNameFormatter(env("STATUS"));
+        $labels = self::envNameFormatter(env("LABELS"));
+
+
         $baslamaTarihi = null;
-        if (!empty($row[env('START_DATE')])) {
-            $dateBaslama = Carbon::createFromFormat('M d, Y', $row[env('START_DATE')]);
+        if (!empty($row[$startDate])) {
+            $dateBaslama = Carbon::createFromFormat('M d, Y', $row[$startDate]);
             $baslamaTarihi = $dateBaslama->format('Y.m.d');
         }
     
         $bitisTarihi = null;
-        if (!empty($row[env('END_DATE')])) {
-            $dateBitis = Carbon::createFromFormat('M d, Y', $row[env('END_DATE')]);
+        if (!empty($row[$endDate])) {
+            $dateBitis = Carbon::createFromFormat('M d, Y', $row[$endDate]);
             $bitisTarihi = $dateBitis->format('Y.m.d');
         }
         
         $sonaErmeTarihi = null;
         $dateSonaErme = null; 
-        if (!empty($row[env('DUE_DATE')])) {
-            $dateSonaErme = Carbon::createFromFormat('M d, Y', $row[env('DUE_DATE')]);
+        if (!empty($row[$dueDate])) {
+            $dateSonaErme = Carbon::createFromFormat('M d, Y', $row[$dueDate]);
             $sonaErmeTarihi = $dateSonaErme->format('Y.m.d');
         }
     
@@ -56,12 +73,12 @@ class UserImport implements ToModel, WithHeadingRow, WithBatchInserts
             $renk = $tarihFarki >= 0 ? '1' : '2';
         }
     
-        if($row[env('ASSIGNEES')]) {
+        if($row[$assignees]) {
             $user = new Task([
-                'title' => $row[env('TITLE')] ?? null,
-                'assignees' => $row[env('ASSIGNEES')] ?? null,
-                'status' => $row[env('STATUS')] ?? null,
-                'labels' => $row[env('LABELS')] ?? null,
+                'title' => $row[$title] ?? null,
+                'assignees' => $row[$assignees] ?? null,
+                'status' => $row[$status] ?? null,
+                'labels' => $row[$labels] ?? null,
                 'start_date' => $baslamaTarihi ?? null,
                 'end_date' => $bitisTarihi ?? null,
                 'due_date' => $sonaErmeTarihi ?? null,
