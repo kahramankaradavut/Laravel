@@ -120,8 +120,10 @@
                     @php
                         $undelayed = $products->where('complation_status_color', 1)->count();
                         $delayed = $products->where('complation_status_color', 2)->count();
+                        $completedTasks = $products->where('status', 'Done')->count();
+                        $finished = $completedTasks - ($undelayed + $delayed);
                         
-                        $completionPercentage = $undelayed > 0 ? round(($undelayed / ($undelayed + $delayed)) * 100, 2) : 0;
+                        $completionPercentage = $completedTasks > 0 ? round((($finished - $delayed/2 + $undelayed) / $completedTasks) * 100, 2) : 0;
                         
                         $colorClass = '';
                         if ($completionPercentage >= 0 && $completionPercentage <= 40) {
@@ -136,9 +138,9 @@
                     <td>{{ $textName->name }}</td>
                     <td>{{ count($usageCount) }}</td>
                     <td>{{ count($products) }}</td>
-                    <td>{{ $products->where('status', 'Done')->count() }}</td>
-                    <td>{{ $products->where('complation_status_color', 1)->count() }}</td>
-                    <td>{{ $products->where('complation_status_color', 2)->count() }}</td>
+                    <td>{{ $completedTasks }}</td>
+                    <td>{{ $undelayed }}</td>
+                    <td>{{ $delayed }}</td>
                     <td class="{{ $colorClass }}">
                         <div>
                             <span style="color: rgb(0, 0, 0)">{{ number_format($completionPercentage, 2) }}%</span>
@@ -224,9 +226,11 @@
                     @php
                         $undelayed = $completionStatus[$name]['undelayed'];
                         $delayed = $completionStatus[$name]['delayed'];
+                        $completedTasks = $completionStatus[$name]['completed'];
+                        $finished = $completedTasks - ($undelayed + $delayed);
                         
-                        $completionPercentage = $undelayed > 0 ? round(($undelayed / ($undelayed + $delayed)) * 100, 2) : 0;
-                        
+                        $completionPercentage = $completedTasks > 0 ? round((($finished - $delayed/2 + $undelayed) / $completedTasks) * 100, 2) : 0;
+
                         $colorClass = '';
                         if ($completionPercentage >= 0 && $completionPercentage <= 40) {
                             $colorClass = 'bg-danger';
@@ -241,9 +245,9 @@
                                 href="{{ route('person.details', ['personName' => $name]) }}">{{ $name }}</a>
                         </td>
                         <td>{{ $count }}</td>
-                        <td>{{ $completionStatus[$name]['completed'] }}</td>
-                        <td>{{ $completionStatus[$name]['undelayed'] }}</td>
-                        <td>{{ $completionStatus[$name]['delayed'] }}</td>
+                        <td>{{ $completedTasks }}</td>
+                        <td>{{ $undelayed }}</td>
+                        <td>{{ $delayed }}</td>
                         <td class="{{ $colorClass }}">
                             <div>
                                 <span style="color: rgb(0, 0, 0)">{{ number_format($completionPercentage, 2) }}%</span>
