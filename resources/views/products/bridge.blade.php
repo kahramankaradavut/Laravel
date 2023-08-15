@@ -123,7 +123,7 @@
                         $completedTasks = $products->where('status', 'Done')->count();
                         $finished = $completedTasks - ($undelayed + $delayed);
                         
-                        $completionPercentage = $completedTasks > 0 ? round((($finished - $delayed/2 + $undelayed) / $completedTasks) * 100, 2) : 0;
+                        $completionPercentage = $completedTasks > 0 ? round((($finished*(env("DIFFERENCE_MULTIPLIER")) + $delayed*(env("DELAY_MULTIPLIER")) + $undelayed*(env("UNDELAY_MULTIPLIER"))) / $completedTasks) * 100, 2) : 0;
                         
                         $colorClass = '';
                         if ($completionPercentage >= 0 && $completionPercentage <= 40) {
@@ -229,7 +229,7 @@
                         $completedTasks = $completionStatus[$name]['completed'];
                         $finished = $completedTasks - ($undelayed + $delayed);
                         
-                        $completionPercentage = $completedTasks > 0 ? round((($finished - $delayed/2 + $undelayed) / $completedTasks) * 100, 2) : 0;
+                        $completionPercentage = $completedTasks > 0 ? round((($finished*(env("DIFFERENCE_MULTIPLIER")) + $delayed*(env("DELAY_MULTIPLIER")) + $undelayed*(env("UNDELAY_MULTIPLIER"))) / $completedTasks) * 100, 2) : 0;
 
                         $colorClass = '';
                         if ($completionPercentage >= 0 && $completionPercentage <= 40) {

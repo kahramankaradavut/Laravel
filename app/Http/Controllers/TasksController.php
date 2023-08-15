@@ -32,7 +32,7 @@ class TasksController extends Controller
             $completionStatusDelayed = $selectedPerson->where('complation_status_color', 2)->count();
             $completionStatusCompleted = $selectedPerson->where('status', 'Done')->count();
             $finished = $completionStatusCompleted - ( $completionStatusUndelayed + $completionStatusDelayed);
-            $successRateGeneral = $usageCount > 0 ? (($finished - $completionStatusDelayed/2 + $completionStatusUndelayed) / $completionStatusCompleted) * 100 : 0;
+            $successRateGeneral = $usageCount > 0 ? (($finished*(env("DIFFERENCE_MULTIPLIER")) + $completionStatusDelayed*(env("DELAY_MULTIPLIER")) + $completionStatusUndelayed*(env("UNDELAY_MULTIPLIER"))) / $completionStatusCompleted) * 100 : 0;
 
             $abc = Task::where('assignees', 'like', '%' . $personName . '%')
                 ->with('projectDefination')
@@ -44,7 +44,7 @@ class TasksController extends Controller
                 $delayedTasks = $abc->where('complation_status_color', 2)->count();
                 $completedTasks = $abc->where('status', 'Done')->count();
                 $finished = $completedTasks - ($undelayedTasks + $delayedTasks);
-                $successRate = $totalTasks > 0 ? (($finished - $delayedTasks/2 + $undelayedTasks) / $completedTasks) * 100 : 0;
+                $successRate = $totalTasks > 0 ? (($finished*(env("DIFFERENCE_MULTIPLIER")) + $delayedTasks*(env("DELAY_MULTIPLIER")) + $undelayedTasks*(env("UNDELAY_MULTIPLIER"))) / $completedTasks) * 100 : 0;
 
                 return [
                     'total_tasks' => $totalTasks,
@@ -128,7 +128,7 @@ class TasksController extends Controller
                     $delayedTasks = $details->where('complation_status_color', 2)->count();
                     $completedTasks = $details->where('status', 'Done')->count();
                     $finished = $completedTasks - ($undelayedTasks + $delayedTasks);
-                    $successRate = $totalTasks > 0 ? (($finished - $delayedTasks/2 + $undelayedTasks) / $completedTasks) * 100 : 0;
+                    $successRate = $totalTasks > 0 ? (($finished*(env("DIFFERENCE_MULTIPLIER")) + $delayedTasks*(env("DELAY_MULTIPLIER")) + $undelayedTasks*(env("UNDELAY_MULTIPLIER"))) / $completedTasks) * 100 : 0;
                     $name = $details->first()->projectDefination->name;
                     $uid = $details->first()->projectDefination->uid;
 
@@ -182,7 +182,7 @@ class TasksController extends Controller
                         ->count();
                     $jobCount = TaskEmployees::where('employee_id', $employeeId)->count();
                     $finished = $completedTasks - ($comlationStatusDelayed  + $completionStatusUndelayed);
-                    $successRate = $completedTasks > 0 ? (($finished - $comlationStatusDelayed/2 + $completionStatusUndelayed) / $completedTasks) * 100 : 0;
+                    $successRate = $completedTasks > 0 ? (($finished*(env("DIFFERENCE_MULTIPLIER")) + $comlationStatusDelayed*(env("DELAY_MULTIPLIER")) + $completionStatusUndelayed*(env("UNDELAY_MULTIPLIER"))) / $completedTasks) * 100 : 0;
                     $employeesDetails[$employeeName] = [
                         'name' => $employeeName,
                         'job_count' => $jobCount,
