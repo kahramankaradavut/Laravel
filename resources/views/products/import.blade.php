@@ -90,6 +90,8 @@
             const fileName = this.value.split('\\').pop();
             fileDropText.textContent = fileName;
         });
+
+        
     </script>
 </body>
 

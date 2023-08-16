@@ -94,6 +94,8 @@
     <div class="header">
         <h1>Project Name: {{ $textInput }}</h1>
 
+        <button id="deleteButton" class="btn bg-danger" style="color: #fff; margin-bottom: 10px;">Delete
+            Project</button>
 
         <div class="container" style="margin-bottom: 10px; margin-top: 10px">
             <table class="ui celled table table-secondary display" style="width: 100%" id="myTable3">
@@ -115,7 +117,7 @@
                         $completedTasks = $products->where('status', 'Done')->count();
                         $finished = $completedTasks - ($undelayed + $delayed);
                         
-                        $completionPercentage = $completedTasks > 0 ? round((($finished*(env("DIFFERENCE_MULTIPLIER")) + $delayed*(env("DELAY_MULTIPLIER")) + $undelayed*(env("UNDELAY_MULTIPLIER"))) / $completedTasks) * 100, 2) : 0;
+                        $completionPercentage = $completedTasks > 0 ? round((($finished * env('DIFFERENCE_MULTIPLIER') + $delayed * env('DELAY_MULTIPLIER') + $undelayed * env('UNDELAY_MULTIPLIER')) / $completedTasks) * 100, 2) : 0;
                         
                         $colorClass = '';
                         if ($completionPercentage >= 0 && $completionPercentage <= 40) {
@@ -215,7 +217,7 @@
                         $completedTasks = $completionStatus[$name]['completed'];
                         $finished = $completedTasks - ($undelayed + $delayed);
                         
-                        $completionPercentage = $completedTasks > 0 ? round((($finished*(env("DIFFERENCE_MULTIPLIER")) + $delayed*(env("DELAY_MULTIPLIER")) + $undelayed*(env("UNDELAY_MULTIPLIER"))) / $completedTasks) * 100, 2) : 0;
+                        $completionPercentage = $completedTasks > 0 ? round((($finished * env('DIFFERENCE_MULTIPLIER') + $delayed * env('DELAY_MULTIPLIER') + $undelayed * env('UNDELAY_MULTIPLIER')) / $completedTasks) * 100, 2) : 0;
                         
                         $colorClass = '';
                         if ($completionPercentage >= 0 && $completionPercentage <= 40) {
@@ -290,16 +292,16 @@
 
 
             document.getElementById("copyLinkButton").addEventListener("click", function() {
-            var linkToCopy = "{{ route('show.table', $textInput) }}"
-            var tempInput = document.createElement("input");
-            document.body.appendChild(tempInput);
-            tempInput.value = linkToCopy;
-            tempInput.select();
-            document.execCommand("copy");
-            document.body.removeChild(tempInput);
+                var linkToCopy = "{{ route('show.table', $textInput) }}"
+                var tempInput = document.createElement("input");
+                document.body.appendChild(tempInput);
+                tempInput.value = linkToCopy;
+                tempInput.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempInput);
 
 
-            var alertTimeout = 2000; // 1 saniye
+                var alertTimeout = 2000; // 1 saniye
 
                 var alertElement = document.createElement("div");
                 alertElement.style.position = "fixed";
@@ -317,7 +319,68 @@
                 setTimeout(function() {
                     alertElement.remove();
                 }, alertTimeout);
-        });
+            });
+
+            document.getElementById("deleteButton").addEventListener("click", function() {
+
+                var password = prompt("Şifreyi Girin:");
+                var project_name = "{{ $textInput }}";
+
+                if (password === "{{ $passwordCheck }}") {
+
+                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+                    $.ajax({
+                        url: '{{ route('deleteDataProject') }}',
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        data: {
+                            password: password,
+                            project_name: project_name,
+                        },
+                        success: function(response) {
+                            alert('Project Deleted Successfully!');
+
+
+                            setTimeout(function() {
+                                window.location.href = '{{ route('all.projects') }}';
+                            }, 1000);
+                        },
+                        error: function(xhr, status, error) {
+                            alert('Something went wrong ' + error);
+
+                            setTimeout(function() {
+                                window.location.href = '{{ route('all.projects') }}';
+                            }, 1000);
+                        }
+                    });
+
+
+
+                } else {
+                    var alertTimeout = 2000; // 1 saniye
+
+                    var alertElement = document.createElement("div");
+                    alertElement.style.position = "fixed";
+                    alertElement.style.top = "50%";
+                    alertElement.style.left = "50%";
+                    alertElement.style.transform = "translate(-50%, -50%)";
+                    alertElement.style.backgroundColor = "#dc3545";
+                    alertElement.style.padding = "10px";
+                    alertElement.style.color = "white";
+                    alertElement.style.borderRadius = "5px";
+                    alertElement.style.boxShadow = "0px 0px 5px rgba(0, 0, 0, 0.5)";
+                    alertElement.textContent = "Wrong Password!";
+                    document.body.appendChild(alertElement);
+
+                    setTimeout(function() {
+                        alertElement.remove();
+                    }, alertTimeout);
+                }
+
+            });
         </script>
         <div style="height: 1px;"></div>
 </body>

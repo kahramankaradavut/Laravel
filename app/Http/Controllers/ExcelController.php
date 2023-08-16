@@ -140,7 +140,9 @@ foreach ($tasks as $task) {
         }
   
         $inputs = ProjectDefination::orderBy('uid', 'desc')->get();
+        $passwordCheck = env('DELETE_PASSWORD');
 
-        return view('products.index', compact('products', 'usageCount', 'completionStatus', 'textInput', 'inputs', 'uidURL'));
+
+        return view('products.index', compact('products', 'usageCount', 'passwordCheck', 'completionStatus', 'textInput', 'inputs', 'uidURL'));
     }
 }
