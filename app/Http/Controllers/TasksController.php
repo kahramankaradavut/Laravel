@@ -55,7 +55,7 @@ class TasksController extends Controller
                 ];
             });
             $passwordCheck = env('DELETE_PASSWORD');
-
+            
             return view('products.person_details', compact('personName', 'passwordCheck', 'usageCount', 'employeesName', 'projectStatistics', 'abc', 'completionStatusCompleted', 'completionStatusDelayed', 'completionStatusUndelayed', 'successRateGeneral', 'employeeId'));
         } else {
             $errorMessage = 'This Employee Has Been Deleted!';
@@ -104,10 +104,17 @@ class TasksController extends Controller
             }
         }
 
+        $coefficient = [];
+        foreach ($usageCount as $name => $count) {
+            $coefficient[$name] = (100 - (($count*100) / count($products))) / 100;
+        }
+
+
+
         $inputs = ProjectDefination::orderBy('uid', 'desc')->get();
         $passwordCheck = env('DELETE_PASSWORD');
 
-        return view('products.bridge', compact('products', 'passwordCheck', 'usageCount', 'completionStatus', 'textName', 'uploadDate', 'inputs', 'textInput'));
+        return view('products.bridge', compact('products', 'coefficient', 'passwordCheck', 'usageCount', 'completionStatus', 'textName', 'uploadDate', 'inputs', 'textInput'));
     }
 
     public function allProjects()

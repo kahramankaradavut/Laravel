@@ -75,7 +75,14 @@
 </head>
 
 <body>
-
+    @if (env('SHOW_PROJECT'))
+    <nav>
+        <ul>
+            <li><a id="copyLinkButton" class="menubar">Copy Page Link</a></li>
+            <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
+        </ul>
+    </nav>
+    @else
     <nav>
         <ul>
             <li><a id="copyLinkButton" class="menubar">Copy Page Link</a>
@@ -93,6 +100,7 @@
             </li>
         </ul>
     </nav>
+    @endif
 
 
     <div class="header">
@@ -228,8 +236,9 @@
                         $delayed = $completionStatus[$name]['delayed'];
                         $completedTasks = $completionStatus[$name]['completed'];
                         $finished = $completedTasks - ($undelayed + $delayed);
-                        
-                        $completionPercentage = $completedTasks > 0 ? round((($finished*(env("DIFFERENCE_MULTIPLIER")) + $delayed*(env("DELAY_MULTIPLIER")) + $undelayed*(env("UNDELAY_MULTIPLIER"))) / $completedTasks) * 100, 2) : 0;
+                        $coef = $coefficient[$name];
+            
+                        $completionPercentage = $completedTasks > 0 ? round((($finished*(env("DIFFERENCE_MULTIPLIER")) + $delayed*(env("DELAY_MULTIPLIER"))*$coef + $undelayed*(env("UNDELAY_MULTIPLIER"))) / $completedTasks) * 100, 2) : 0;
 
                         $colorClass = '';
                         if ($completionPercentage >= 0 && $completionPercentage <= 40) {
@@ -240,10 +249,14 @@
                             $colorClass = 'bg-success';
                         }
                     @endphp <tr>
+                        @if(env("SHOW_PROJECT"))
+                            <td>{{ $name }}</td>
+                        @else
                         <td>
                             <a class="custom-link"
                                 href="{{ route('person.details', ['personName' => $name]) }}">{{ $name }}</a>
                         </td>
+                        @endif
                         <td>{{ $count }}</td>
                         <td>{{ $completedTasks }}</td>
                         <td>{{ $undelayed }}</td>

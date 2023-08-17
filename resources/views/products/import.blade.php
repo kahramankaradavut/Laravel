@@ -63,8 +63,10 @@
         });
     </script>
 
-    @if (env('SHOW_PROJECT', false))
-        <div id="line"></div>
+    @if (env('SHOW_PROJECT'))
+        
+    @else
+    <div id="line"></div>
         <form action="{{ route('show.table') }}" method="GET" enctype="multipart/form-data">
             <div class="content">
                 <p>Access preloaded project files.</p>
@@ -80,7 +82,7 @@
                 <button type="submit" class="custom-button">Show</button>
             </div>
         </form>
-    @endif
+        @endif
 
     <script>
         const fileInput = document.getElementById('excel-import');
