@@ -304,7 +304,7 @@
 
 
             document.getElementById("copyLinkButton").addEventListener("click", function() {
-                var linkToCopy = "{{ route('show.table', $textInput) }}"
+                var linkToCopy = "{{ route('show.table', $uidURL) }}"
                 var tempInput = document.createElement("input");
                 document.body.appendChild(tempInput);
                 tempInput.value = linkToCopy;
