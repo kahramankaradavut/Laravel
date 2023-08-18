@@ -11,32 +11,6 @@ use Illuminate\Support\Facades\Session;
 
 class DataController extends Controller
 {
-    public function deleteData(Request $request)
-    {
-        $password = $request->input('password');
-        $dataType = $request->input('type');
-        $dataId = $request->input('id');
-        $status = 0;
-
-
-        if ($password === env('DELETE_PASSWORD')) {
-            if ($dataType === 'user') {
-                // Kullanıcı verilerini silme işlemi
-                Employees::where('id', $dataId)->delete();
-                Session::flash('success', 'Kullanıcı verileri başarıyla silindi.');
-                $status = 1;
-            } elseif ($dataType === 'project') {
-                // Proje verilerini silme işlemi
-                ProjectDefination::where('id', $dataId)->delete();
-                Session::flash('success', 'Proje verileri başarıyla silindi.');
-                $status = 1;
-            }
-        } else {
-            Session::flash('error', 'Geçersiz şifre. Veriler silinemedi.');
-        }
-
-        return response()->json(['status' => $status]);
-    }
 
     public function deleteDataProject(Request $request)
     {
