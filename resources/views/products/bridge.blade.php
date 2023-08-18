@@ -375,7 +375,7 @@
 
 
                         setTimeout(function() {
-                            window.location.href = '{{ route('all.projects') }}';
+                            window.location.href = '{{ route('importpage') }}';
                         }, 1000);
                     } else {
                         var alertTimeout = 2000; 
@@ -400,10 +400,6 @@
                 },
                 error: function(xhr, status, error) {
                     alert('Something went wrong ' + error);
-
-                    setTimeout(function() {
-                        window.location.href = '{{ route('all.projects') }}';
-                    }, 1000);
                 }
             });
         });

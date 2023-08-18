@@ -13,6 +13,9 @@ class TasksController extends Controller
 {
     public function showPersonDetails($personName)
     {
+        if (env('SHOW_PROJECT') == false) {
+            abort(404);
+        }
         $employeeId = Employees::where('name', $personName)->first();
 
         if ($employeeId) {
@@ -119,6 +122,9 @@ class TasksController extends Controller
 
     public function allProjects()
     {
+        if (env('SHOW_PROJECT') == false) {
+            abort(404);
+        }
         $anyProject = ProjectDefination::all()->first();
         if ($anyProject !== null) {
             $allProjectsId = ProjectDefination::orderBy('id')->pluck('id', 'name');
@@ -170,6 +176,9 @@ class TasksController extends Controller
 
     public function allEmployees()
     {
+        if (env('SHOW_PROJECT') == false) {
+            abort(404);
+        }
         $anyEmployees = Employees::all()->first();
 
         if ($anyEmployees !== null) {

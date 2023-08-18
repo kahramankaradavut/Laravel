@@ -359,7 +359,7 @@
 
 
                             setTimeout(function() {
-                                window.location.href = '{{ route('all.projects') }}';
+                                window.location.href = '{{ route('importpage') }}';
                             }, 1000);
                         } else {
                             var alertTimeout = 2000; // 1 saniye

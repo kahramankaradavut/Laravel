@@ -30,6 +30,9 @@ class ExcelController extends Controller
         ]);
 
         $textInput = $request->input('text_input');
+        if (!$textInput) {
+            abort(404);
+        }
         $existingData = ProjectDefination::where('name', $textInput)->exists();
         if ($existingData) {
             return redirect()->back()->withErrors(['message' => 'This name is already registered. Try a different name.']);
