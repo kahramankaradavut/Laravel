@@ -76,30 +76,29 @@
 
 <body>
     @if (env('SHOW_PROJECT'))
-    <nav>
-        <ul>
-            <li><a id="copyLinkButton" class="menubar">Copy Page Link</a></li>
-            <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
-        </ul>
-    </nav>
+        <nav>
+            <ul>
+                <li><a id="copyLinkButton" class="menubar">Copy Page Link</a></li>
+                <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
+                <li><a href="{{ route('all.projects') }}" class="menubar">Details of All Projects</a></li>
+                <li><a href="{{ route('all.employees') }}" class="menubar">Details of All Employees</a></li>
+                <li class="dropdown">
+                    <a class="menubar">All Projects ▼</a>
+                    <ul class="dropdown-menu">
+                        @foreach ($inputs as $input)
+                            <li><a href="{{ route('show.table', $input->uid) }}">{{ $input->name }}</a></li>
+                        @endforeach
+                    </ul>
+                </li>
+            </ul>
+        </nav>
     @else
-    <nav>
-        <ul>
-            <li><a id="copyLinkButton" class="menubar">Copy Page Link</a>
-            </li>
-            <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
-            <li><a href="{{ route('all.projects') }}" class="menubar">Details of All Projects</a></li>
-            <li><a href="{{ route('all.employees') }}" class="menubar">Details of All Employees</a></li>
-            <li class="dropdown">
-                <a class="menubar">All Projects ▼</a>
-                <ul class="dropdown-menu">
-                    @foreach ($inputs as $input)
-                        <li><a href="{{ route('show.table', $input->uid) }}">{{ $input->name }}</a></li>
-                    @endforeach
-                </ul>
-            </li>
-        </ul>
-    </nav>
+        <nav>
+            <ul>
+                <li><a id="copyLinkButton" class="menubar">Copy Page Link</a></li>
+                <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
+            </ul>
+        </nav>
     @endif
 
 
@@ -108,7 +107,8 @@
         <h1>Project Name: {{ $textName->name }}</h1>
         <h4>Upload Date: {{ $uploadDate }}</h4>
 
-        <button id="deleteButton" class="btn bg-danger" style="color: #fff; margin-bottom: 10px;">Delete Project</button>
+        <button id="deleteButton" class="btn bg-danger" style="color: #fff; margin-bottom: 10px;">Delete
+            Project</button>
 
 
         <div class="container" style="margin-bottom: 10px;">
@@ -131,7 +131,7 @@
                         $completedTasks = $products->where('status', 'Done')->count();
                         $finished = $completedTasks - ($undelayed + $delayed);
                         
-                        $completionPercentage = $completedTasks > 0 ? round((($finished*(env("DIFFERENCE_MULTIPLIER")) + $delayed*(env("DELAY_MULTIPLIER")) + $undelayed*(env("UNDELAY_MULTIPLIER"))) / $completedTasks) * 100, 2) : 0;
+                        $completionPercentage = $completedTasks > 0 ? round((($finished * env('DIFFERENCE_MULTIPLIER') + $delayed * env('DELAY_MULTIPLIER') + $undelayed * env('UNDELAY_MULTIPLIER')) / $completedTasks) * 100, 2) : 0;
                         
                         $colorClass = '';
                         if ($completionPercentage >= 0 && $completionPercentage <= 40) {
@@ -237,9 +237,9 @@
                         $completedTasks = $completionStatus[$name]['completed'];
                         $finished = $completedTasks - ($undelayed + $delayed);
                         $coef = $coefficient[$name];
-            
-                        $completionPercentage = $completedTasks > 0 ? round((($finished*(env("DIFFERENCE_MULTIPLIER")) + $delayed*(env("DELAY_MULTIPLIER"))*$coef + $undelayed*(env("UNDELAY_MULTIPLIER"))) / $completedTasks) * 100, 2) : 0;
-
+                        
+                        $completionPercentage = $completedTasks > 0 ? round((($finished * env('DIFFERENCE_MULTIPLIER') + $delayed * env('DELAY_MULTIPLIER') * $coef + $undelayed * env('UNDELAY_MULTIPLIER')) / $completedTasks) * 100, 2) : 0;
+                        
                         $colorClass = '';
                         if ($completionPercentage >= 0 && $completionPercentage <= 40) {
                             $colorClass = 'bg-danger';
@@ -249,13 +249,13 @@
                             $colorClass = 'bg-success';
                         }
                     @endphp <tr>
-                        @if(env("SHOW_PROJECT"))
-                            <td>{{ $name }}</td>
+                        @if (env('SHOW_PROJECT'))
+                            <td>
+                                <a class="custom-link"
+                                    href="{{ route('person.details', ['personName' => $name]) }}">{{ $name }}</a>
+                            </td>
                         @else
-                        <td>
-                            <a class="custom-link"
-                                href="{{ route('person.details', ['personName' => $name]) }}">{{ $name }}</a>
-                        </td>
+                            <td>{{ $name }}</td>
                         @endif
                         <td>{{ $count }}</td>
                         <td>{{ $completedTasks }}</td>
@@ -327,83 +327,85 @@
 
             var alertTimeout = 2000; // 1 saniye
 
-                var alertElement = document.createElement("div");
-                alertElement.style.position = "fixed";
-                alertElement.style.top = "50%";
-                alertElement.style.left = "50%";
-                alertElement.style.transform = "translate(-50%, -50%)";
-                alertElement.style.backgroundColor = "#28a745";
-                alertElement.style.padding = "10px";
-                alertElement.style.color = "white";
-                alertElement.style.borderRadius = "5px";
-                alertElement.style.boxShadow = "0px 0px 5px rgba(0, 0, 0, 0.5)";
-                alertElement.textContent = "Link Copied!";
-                document.body.appendChild(alertElement);
+            var alertElement = document.createElement("div");
+            alertElement.style.position = "fixed";
+            alertElement.style.top = "50%";
+            alertElement.style.left = "50%";
+            alertElement.style.transform = "translate(-50%, -50%)";
+            alertElement.style.backgroundColor = "#28a745";
+            alertElement.style.padding = "10px";
+            alertElement.style.color = "white";
+            alertElement.style.borderRadius = "5px";
+            alertElement.style.boxShadow = "0px 0px 5px rgba(0, 0, 0, 0.5)";
+            alertElement.textContent = "Link Copied!";
+            document.body.appendChild(alertElement);
 
-                setTimeout(function() {
-                    alertElement.remove();
-                }, alertTimeout);
+            setTimeout(function() {
+                alertElement.remove();
+            }, alertTimeout);
         });
+
 
         document.getElementById("deleteButton").addEventListener("click", function() {
 
             var password = prompt("Şifreyi Girin:");
+
+            if(typeof password != "string" || password.trim() == "")
+            {
+                return
+            }
             var project_name = "{{ $textName->name }}";
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            
+            $.ajax({
+                url: '{{ route('deleteDataProject') }}',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                data: {
+                    password: password,
+                    project_name: project_name,
+                },
 
-            if (password === "{{ $passwordCheck }}") {
+                success: function(response) {
 
-                var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-                $.ajax({
-                    url: '{{ route('deleteDataProject') }}',
-                    type: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    data: {
-                        password: password,
-                        project_name: project_name,
-                    },
-                    success: function(response) {
+                    if (response == 1) {
                         alert('Project Deleted Successfully!');
 
 
                         setTimeout(function() {
                             window.location.href = '{{ route('all.projects') }}';
                         }, 1000);
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Something went wrong ' + error);
+                    } else {
+                        var alertTimeout = 2000; 
+
+                        var alertElement = document.createElement("div");
+                        alertElement.style.position = "fixed";
+                        alertElement.style.top = "50%";
+                        alertElement.style.left = "50%";
+                        alertElement.style.transform = "translate(-50%, -50%)";
+                        alertElement.style.backgroundColor = "#dc3545";
+                        alertElement.style.padding = "10px";
+                        alertElement.style.color = "white";
+                        alertElement.style.borderRadius = "5px";
+                        alertElement.style.boxShadow = "0px 0px 5px rgba(0, 0, 0, 0.5)";
+                        alertElement.textContent = "Wrong Password!";
+                        document.body.appendChild(alertElement);
 
                         setTimeout(function() {
-                            window.location.href = '{{ route('all.projects') }}';
-                        }, 1000);
+                            alertElement.remove();
+                        }, alertTimeout);
                     }
-                });
+                },
+                error: function(xhr, status, error) {
+                    alert('Something went wrong ' + error);
 
-
-
-            } else {
-                var alertTimeout = 2000; // 1 saniye
-
-                var alertElement = document.createElement("div");
-                alertElement.style.position = "fixed";
-                alertElement.style.top = "50%";
-                alertElement.style.left = "50%";
-                alertElement.style.transform = "translate(-50%, -50%)";
-                alertElement.style.backgroundColor = "#dc3545";
-                alertElement.style.padding = "10px";
-                alertElement.style.color = "white";
-                alertElement.style.borderRadius = "5px";
-                alertElement.style.boxShadow = "0px 0px 5px rgba(0, 0, 0, 0.5)";
-                alertElement.textContent = "Wrong Password!";
-                document.body.appendChild(alertElement);
-
-                setTimeout(function() {
-                    alertElement.remove();
-                }, alertTimeout);
-            }
-
+                    setTimeout(function() {
+                        window.location.href = '{{ route('all.projects') }}';
+                    }, 1000);
+                }
+            });
         });
     </script>
 

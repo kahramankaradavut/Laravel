@@ -64,25 +64,25 @@
     </script>
 
     @if (env('SHOW_PROJECT'))
-        
-    @else
     <div id="line"></div>
-        <form action="{{ route('show.table') }}" method="GET" enctype="multipart/form-data">
-            <div class="content">
-                <p>Access preloaded project files.</p>
-                <div class="custom-select">
-                    <select name="textInput" aria-label="Default select example" id="items">
-                        <option disabled selected>Select the project name you want to view</option>
-                        @foreach ($inputs as $input)
-                            <option value="{{ $input->uid }}">{{ $input->name }} - - - - - ->
-                                {{ $input->updated_at->format('d.m.Y') }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <button type="submit" class="custom-button">Show</button>
+    <form action="{{ route('show.table') }}" method="GET" enctype="multipart/form-data">
+        <div class="content">
+            <p>Access preloaded project files.</p>
+            <div class="custom-select">
+                <select name="textInput" aria-label="Default select example" id="items">
+                    <option disabled selected>Select the project name you want to view</option>
+                    @foreach ($inputs as $input)
+                        <option value="{{ $input->uid }}">{{ $input->name }} - - - - - ->
+                            {{ $input->updated_at->format('d.m.Y') }}</option>
+                    @endforeach
+                </select>
             </div>
-        </form>
-        @endif
+            <button type="submit" class="custom-button">Show</button>
+        </div>
+    </form>
+    @else
+    
+    @endif
 
     <script>
         const fileInput = document.getElementById('excel-import');

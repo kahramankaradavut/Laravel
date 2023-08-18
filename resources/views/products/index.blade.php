@@ -4,6 +4,7 @@
 <head>
     {{-- <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1"> --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic.min.css">
@@ -73,24 +74,31 @@
 </head>
 
 <body>
-    <nav>
-        <ul>
-            <li><a id="copyLinkButton" class="menubar">Copy Page Link</a>
-            <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
-            <li><a href="{{ route('all.projects') }}" class="menubar">Details of All Projects</a></li>
-            <li><a href="{{ route('all.employees') }}" class="menubar">Details of All Employees</a></li>
-            <li class="dropdown">
-                <a class="menubar">All Projects ▼</a>
-                <ul class="dropdown-menu">
-                    @foreach ($inputs as $input)
-                        <li><a href="{{ route('show.table', $input->uid) }}">{{ $input->name }}</a></li>
-                    @endforeach
-                </ul>
-            </li>
-        </ul>
-    </nav>
-
-
+    @if (env('SHOW_PROJECT'))
+        <nav>
+            <ul>
+                <li><a id="copyLinkButton" class="menubar">Copy Page Link</a></li>
+                <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
+                <li><a href="{{ route('all.projects') }}" class="menubar">Details of All Projects</a></li>
+                <li><a href="{{ route('all.employees') }}" class="menubar">Details of All Employees</a></li>
+                <li class="dropdown">
+                    <a class="menubar">All Projects ▼</a>
+                    <ul class="dropdown-menu">
+                        @foreach ($inputs as $input)
+                            <li><a href="{{ route('show.table', $input->uid) }}">{{ $input->name }}</a></li>
+                        @endforeach
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    @else
+        <nav>
+            <ul>
+                <li><a id="copyLinkButton" class="menubar">Copy Page Link</a></li>
+                <li><a href="{{ route('importpage') }}" class="menubar">Main Page</a></li>
+            </ul>
+        </nav>
+    @endif
     <div class="header">
         <h1>Project Name: {{ $textInput }}</h1>
 
@@ -229,10 +237,14 @@
                         }
                     @endphp
                     <tr>
-                        <td>
-                            <a class="custom-link"
-                                href="{{ route('person.details', ['personName' => $name]) }}">{{ $name }}</a>
-                        </td>
+                        @if (env('SHOW_PROJECT'))
+                            <td>
+                                <a class="custom-link"
+                                    href="{{ route('person.details', ['personName' => $name]) }}">{{ $name }}</a>
+                            </td>
+                        @else
+                            <td>{{ $name }}</td>
+                        @endif
                         <td>{{ $count }}</td>
                         <td>{{ $completedTasks }}</td>
                         <td>{{ $undelayed }}</td>
@@ -324,62 +336,57 @@
             document.getElementById("deleteButton").addEventListener("click", function() {
 
                 var password = prompt("Şifreyi Girin:");
+
+                if (typeof password != "string" || password.trim() == "") {
+                    return
+                }
                 var project_name = "{{ $textInput }}";
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-                if (password === "{{ $passwordCheck }}") {
-
-                    var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-                    $.ajax({
-                        url: '{{ route('deleteDataProject') }}',
-                        type: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken
-                        },
-                        data: {
-                            password: password,
-                            project_name: project_name,
-                        },
-                        success: function(response) {
+                $.ajax({
+                    url: '{{ route('deleteDataProject') }}',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    data: {
+                        password: password,
+                        project_name: project_name,
+                    },
+                    success: function(response) {
+                        if (response == 1) {
                             alert('Project Deleted Successfully!');
 
 
                             setTimeout(function() {
                                 window.location.href = '{{ route('all.projects') }}';
                             }, 1000);
-                        },
-                        error: function(xhr, status, error) {
-                            alert('Something went wrong ' + error);
+                        } else {
+                            var alertTimeout = 2000; // 1 saniye
+
+                            var alertElement = document.createElement("div");
+                            alertElement.style.position = "fixed";
+                            alertElement.style.top = "50%";
+                            alertElement.style.left = "50%";
+                            alertElement.style.transform = "translate(-50%, -50%)";
+                            alertElement.style.backgroundColor = "#dc3545";
+                            alertElement.style.padding = "10px";
+                            alertElement.style.color = "white";
+                            alertElement.style.borderRadius = "5px";
+                            alertElement.style.boxShadow = "0px 0px 5px rgba(0, 0, 0, 0.5)";
+                            alertElement.textContent = "Wrong Password!";
+                            document.body.appendChild(alertElement);
 
                             setTimeout(function() {
-                                window.location.href = '{{ route('all.projects') }}';
-                            }, 1000);
+                                alertElement.remove();
+                            }, alertTimeout);
                         }
-                    });
 
-
-
-                } else {
-                    var alertTimeout = 2000; // 1 saniye
-
-                    var alertElement = document.createElement("div");
-                    alertElement.style.position = "fixed";
-                    alertElement.style.top = "50%";
-                    alertElement.style.left = "50%";
-                    alertElement.style.transform = "translate(-50%, -50%)";
-                    alertElement.style.backgroundColor = "#dc3545";
-                    alertElement.style.padding = "10px";
-                    alertElement.style.color = "white";
-                    alertElement.style.borderRadius = "5px";
-                    alertElement.style.boxShadow = "0px 0px 5px rgba(0, 0, 0, 0.5)";
-                    alertElement.textContent = "Wrong Password!";
-                    document.body.appendChild(alertElement);
-
-                    setTimeout(function() {
-                        alertElement.remove();
-                    }, alertTimeout);
-                }
-
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Something went wrong ' + error);
+                    }
+                });
             });
         </script>
         <div style="height: 1px;"></div>

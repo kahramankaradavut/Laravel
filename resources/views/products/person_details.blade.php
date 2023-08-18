@@ -224,65 +224,64 @@
         document.getElementById("deleteButton").addEventListener("click", function() {
 
             var password = prompt("Şifreyi Girin:");
+
+            if(typeof password != "string" || password.trim() == "")
+            {
+                return
+            }
+
             var person_id = "{{ $employeeId->id }}";
             var person_name = "{{ $personName }}";
 
-            if (password === "{{ $passwordCheck }}") {
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-
-                var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-                $.ajax({
-                    url: '{{ route('dataDeleteEmployee') }}',
-                    type: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    data: {
-                        password: password,
-                        person_id: person_id,
-                        person_name: person_name
-                    },
-                    success: function(response) {
+            $.ajax({
+                url: '{{ route('dataDeleteEmployee') }}',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                data: {
+                    password: password,
+                    person_id: person_id,
+                    person_name: person_name
+                },
+                success: function(response) {
+                    if (response == 1) {
                         alert('Employee Deleted Successfully!');
 
-
                         setTimeout(function() {
                             window.location.href = '{{ route('all.employees') }}';
                         }, 1000);
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Something went wrong: ' + error);
+                    } else {
+                        var alertTimeout = 2000; 
+
+                        var alertElement = document.createElement("div");
+                        alertElement.style.position = "fixed";
+                        alertElement.style.top = "50%";
+                        alertElement.style.left = "50%";
+                        alertElement.style.transform = "translate(-50%, -50%)";
+                        alertElement.style.backgroundColor = "#dc3545";
+                        alertElement.style.padding = "10px";
+                        alertElement.style.color = "white";
+                        alertElement.style.borderRadius = "5px";
+                        alertElement.style.boxShadow = "0px 0px 5px rgba(0, 0, 0, 0.5)";
+                        alertElement.textContent = "Wrong Passsword!";
+                        document.body.appendChild(alertElement);
 
                         setTimeout(function() {
-                            window.location.href = '{{ route('all.employees') }}';
-                        }, 1000);
+                            alertElement.remove();
+                        }, alertTimeout);
                     }
-                });
+                },
+                error: function(xhr, status, error) {
+                    alert('Something went wrong: ' + error);
 
-
-
-            } else {
-                var alertTimeout = 2000; // 1 saniye
-
-                var alertElement = document.createElement("div");
-                alertElement.style.position = "fixed";
-                alertElement.style.top = "50%";
-                alertElement.style.left = "50%";
-                alertElement.style.transform = "translate(-50%, -50%)";
-                alertElement.style.backgroundColor = "#dc3545";
-                alertElement.style.padding = "10px";
-                alertElement.style.color = "white";
-                alertElement.style.borderRadius = "5px";
-                alertElement.style.boxShadow = "0px 0px 5px rgba(0, 0, 0, 0.5)";
-                alertElement.textContent = "Wrong Passsword!";
-                document.body.appendChild(alertElement);
-
-                setTimeout(function() {
-                    alertElement.remove();
-                }, alertTimeout);
-            }
-
+                    setTimeout(function() {
+                        window.location.href = '{{ route('all.employees') }}';
+                    }, 1000);
+                }
+            });
         });
     </script>
     <div style="height: 1px;"></div>

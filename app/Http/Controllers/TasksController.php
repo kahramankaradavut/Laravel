@@ -210,49 +210,6 @@ class TasksController extends Controller
         }
     }
 
-    public function deleteDataEmployee(Request $request)
-    {
-        $password = $request->input('password');
-        $dataId = $request->input('person_id');
-        $dataName = $request->input('person_name');
-
-        Employees::where('id', $dataId)->delete();
-        TaskEmployees::where('employee_id', $dataId)->delete();
-        $tasks = Task::all();
-
-        foreach ($tasks as $task) {
-            $assignees = explode(', ', $task->assignees);
-
-            $index = array_search($dataName, $assignees);
-            if ($index !== false) {
-                unset($assignees[$index]);
-            }
-
-            $task->assignees = implode(', ', $assignees);
-            $task->save();
-
-            if (empty($task->assignees)) {
-                $task->delete();
-            }
-        }
-        return response()->json(['success' => true, 'message' => 'Kullanıcı verileri başarıyla silindi.']);
-    }
-
-    public function deleteDataProject(Request $request)
-    {
-        $password = $request->input('password');
-        $dataName = $request->input('project_name');
-        $project = ProjectDefination::where('name', $dataName)->first();
-
-        $taskEmployee = Task::where('project_defination_id', $project->id)->get();
-
-        foreach ($taskEmployee as $task) {
-            TaskEmployees::where('task_id', $task->id)->delete();
-        }
-
-        ProjectDefination::where('name', $dataName)->delete();
-        Task::where('project_defination_id', $project->id)->delete();
-
-        return response()->json(['success' => true, 'message' => 'Kullanıcı verileri başarıyla silindi.']);
-    }
+    
+    
 }
